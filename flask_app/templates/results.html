@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>物品名称</th>
+                <th>数量之和</th>
+                <th>分单数量</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in item_summary %}
+            <tr>
+                <td>{{ item['物品名称'] }}</td>
+                <td>{{ item['数量之和'] }}</td>
+                <td>{{ item['分单数量'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Number of multi-item ParcelNumbers: {{ num_multi_item_parcel }}</p>
+    <p>Proportion of taxable ParcelNumbers: {{ taxable_proportion }}</p>
+    <p>Sum of unique ParcelNumbers: {{ unique_分单号_count }}</p>
+    <p>Total tax for taxable parcels: {{ total_tax }}</p>
+</body>
+</html>
