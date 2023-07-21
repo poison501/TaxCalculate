@@ -1,21 +1,31 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template, redirect, url_for
 import pandas as pd
-from Taxable import calculate
+from Taxable import calculate, hscode_mapping
 
 app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False  # Add this line
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'csv'}  # Set of allowed file extensions
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'csv'}
 
+@app.route('/add', methods=['GET', 'POST'])
+def add_good():
+    if request.method == 'POST':
+        hscode = int(request.form['hscode'])
+        goods_type = request.form['goods_type']
+        tax_rate = float(request.form['tax_rate'].strip('%')) / 100
+        legal_unit = request.form['legal_unit']
+        tax_price = float(request.form['tax_price'])
+        if hscode not in hscode_mapping:
+            hscode_mapping[hscode] = {'商品类型': goods_type, '关税税率': tax_rate, '法定单位': legal_unit, '完税价格': tax_price}
+        else:
+            return 'HSCode already exists'
+    return render_template('AddGood.html', hscode_mapping=hscode_mapping)
 
 @app.route('/', methods=['GET'])
-def upload_form():
-    return render_template('upload.html')
+def home():
+    return redirect(url_for('upload_file'))
 
-@app.route('/upload', methods=['POST'])
+@app.route('/upload', methods=['GET', 'POST'])  # Change this line to accept GET requests
 def upload_file():
     if request.method == 'POST':
         # check if the post request has the file part
@@ -27,21 +37,10 @@ def upload_file():
         if file and allowed_file(file.filename):
             # Read the file
             df = pd.read_csv(file)
-
-            # (Insert your DataFrame processing code here)
             result = calculate(df)
-
-            item_summary = result['Item Summary']
-
-            return render_template('results.html', 
-                                   item_summary=item_summary, 
-                                   num_multi_item_parcel=result['Number of multi-item ParcelNumbers'], 
-                                   taxable_proportion=result['Proportion of taxable ParcelNumbers'], 
-                                   unique_分单号_count=result['Sum of unique ParcelNumbers'], 
-                                   total_tax=result['Total tax for taxable parcels'])
-    return redirect('/')
-
-
+            return render_template('results.html', result=result)
+    elif request.method == 'GET':  # Handle GET requests
+        return render_template('upload.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

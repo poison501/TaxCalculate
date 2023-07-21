@@ -2,6 +2,15 @@ import pandas as pd
 from prettytable import PrettyTable
 from termcolor import colored
 
+# Move hscode_mapping outside the function to make it a global variable
+hscode_mapping = {
+    1010700: {"商品类型": "婴幼儿配方奶粉", "关税税率": 0.13, "法定单位": "公斤", "完税价格": 200},
+    1029900: {"商品类型": "其他饮料", "关税税率": 0.13, "法定单位": "公斤", "完税价格": None},
+    1019900: {"商品类型": "其他食品", "关税税率": 0.13, "法定单位": "件", "完税价格": None},
+    9020190: {"商品类型": "其他清洁用品", "关税税率": 0.20, "法定单位": "件", "完税价格": None},
+    12990000: {"商品类型": "其他家具", "关税税率": 0.13, "法定单位": "件", "完税价格": None}
+}
+
 # Function to calculate the package value and tax
 def calculate_value_and_tax(row):
     price = row["Price"]
@@ -22,15 +31,6 @@ def calculate_value_and_tax(row):
     return pd.Series([value, tax])
 
 def calculate(df):
-    # Create a mapping for the HSCode
-    hscode_mapping = {
-        1010700: {"商品类型": "婴幼儿配方奶粉", "关税税率": 0.13, "法定单位": "公斤", "完税价格": 200},
-        1029900: {"商品类型": "其他饮料", "关税税率": 0.13, "法定单位": "公斤", "完税价格": None},
-        1019900: {"商品类型": "其他食品", "关税税率": 0.13, "法定单位": "件", "完税价格": None},
-        9020190: {"商品类型": "其他清洁用品", "关税税率": 0.20, "法定单位": "件", "完税价格": None},
-        12990000: {"商品类型": "其他家具", "关税税率": 0.13, "法定单位": "件", "完税价格": None}
-    }
-
     # Create a set to store undefined HSCodes
     undefined_hscodes = set()
 

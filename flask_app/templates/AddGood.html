@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Good</title>
+</head>
+<body>
+    <h1>Add New Good</h1>
+    <form method="POST">
+        <label for="hscode">HScode</label>
+        <input type="text" id="hscode" name="hscode" required><br>
+        <label for="goods_type">商品类型</label>
+        <input type="text" id="goods_type" name="goods_type" required><br>
+        <label for="tax_rate">关税税率</label>
+        <input type="text" id="tax_rate" name="tax_rate" required><br>
+        <label for="legal_unit">法定单位</label>
+        <input type="text" id="legal_unit" name="legal_unit" required><br>
+        <label for="tax_price">完税价格</label>
+        <input type="text" id="tax_price" name="tax_price" required><br>
+        <input type="submit" value="Submit">
+    </form>
+    <h1>Current Goods</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>HScode</th>
+                <th>商品类型</th>
+                <th>关税税率</th>
+                <th>法定单位</th>
+                <th>完税价格</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hscode, details in hscode_mapping.items() %}
+            <tr>
+                <td>{{ hscode }}</td>
+                <td>{{ details['商品类型'] }}</td>
+                <td>{{ details['关税税率'] }}</td>
+                <td>{{ details['法定单位'] }}</td>
+                <td>{{ details['完税价格'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

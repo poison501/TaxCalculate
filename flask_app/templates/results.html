@@ -2,21 +2,23 @@
 <html>
 <head>
     <title>Results</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: left;
-        }
-    </style>
 </head>
 <body>
     <h1>Results</h1>
-    <table>
+    <h2>Proportion of taxable ParcelNumbers</h2>
+    <p>{{ result['Proportion of taxable ParcelNumbers'] }}</p>
+
+    <h2>Number of multi-item ParcelNumbers</h2>
+    <p>{{ result['Number of multi-item ParcelNumbers'] }}</p>
+
+    <h2>Total tax for taxable parcels</h2>
+    <p>{{ result['Total tax for taxable parcels'] }}</p>
+
+    <h2>Sum of unique ParcelNumbers</h2>
+    <p>{{ result['Sum of unique ParcelNumbers'] }}</p>
+
+    <h2>Item Summary</h2>
+    <table border="1">
         <thead>
             <tr>
                 <th>物品名称</th>
@@ -25,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in item_summary %}
+            {% for item in result['Item Summary'] %}
             <tr>
                 <td>{{ item['物品名称'] }}</td>
                 <td>{{ item['数量之和'] }}</td>
@@ -34,9 +36,5 @@
             {% endfor %}
         </tbody>
     </table>
-    <p>Number of multi-item ParcelNumbers: {{ num_multi_item_parcel }}</p>
-    <p>Proportion of taxable ParcelNumbers: {{ taxable_proportion }}</p>
-    <p>Sum of unique ParcelNumbers: {{ unique_分单号_count }}</p>
-    <p>Total tax for taxable parcels: {{ total_tax }}</p>
 </body>
 </html>
