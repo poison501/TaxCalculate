@@ -37,6 +37,8 @@ def upload_file():
         if file and allowed_file(file.filename):
             # Read the file
             df = pd.read_csv(file)
+            # 提取不带扩展名的文件名
+            cargo_batch = file.filename.rsplit('.', 1)[0]
             result = calculate(df)
             return render_template('results.html', result=result)
     elif request.method == 'GET':  # Handle GET requests

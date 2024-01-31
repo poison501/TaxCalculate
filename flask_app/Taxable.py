@@ -73,12 +73,11 @@ def calculate(df):
     total_tax = df[df["TaxStatus"] == "出税"]["Tax"].sum()
     print(colored(f"The total tax for all parcels with a taxable status is {total_tax:.2f}.", "yellow"))
 
-    # Output the sum of unique "分单号"
-    unique_分单号_count = df['分单号'].nunique()
-    print(colored(f"The sum of '分单' is {unique_分单号_count}.", "magenta"))
+    # Calculate the tax average
+    Tax_average = total_tax / taxable_parcel_number if taxable_parcel_number else 0
 
     # Output the sum of "数量" for each unique "物品名称"
-    item_quantity_sum = df.groupby('物品名称')['数量'].sum().reset_index()
+    item_quantity_sum = df.groupby('物品名称')['数量'].sum().round(2).reset_index()
 
     # Calculate the number of unique "分单号" for each "物品名称"
     item_parcel_number_count = df.groupby('物品名称')['分单号'].nunique().reset_index()
@@ -89,10 +88,11 @@ def calculate(df):
     item_summary.columns = ['物品名称', '数量之和', '分单数量']
 
     result = {
+        'All Parcel Numbers': total_parcel_number,
         'Proportion of taxable ParcelNumbers': f"{taxable_proportion*100:.2f}%",
         'Number of multi-item ParcelNumbers': num_multi_item_parcel,
         'Total tax for taxable parcels': f"{total_tax:.2f}",
-        'Sum of unique ParcelNumbers': unique_分单号_count,
+        'Tax average': f"{Tax_average:.2f}",
         'Item Summary': item_summary.to_dict(orient='records')  # Convert DataFrame to list of dicts
     }
 
