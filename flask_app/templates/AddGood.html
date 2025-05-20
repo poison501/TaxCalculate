@@ -1,24 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Good</title>
+    <title>添加商品</title>
+    <style>
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        form {
+            margin: 20px 0;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add New Good</h1>
+    <h1>添加新商品</h1>
+    
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    
     <form method="POST">
         <label for="hscode">HScode</label>
         <input type="text" id="hscode" name="hscode" required><br>
         <label for="goods_type">商品类型</label>
         <input type="text" id="goods_type" name="goods_type" required><br>
         <label for="tax_rate">关税税率</label>
-        <input type="text" id="tax_rate" name="tax_rate" required><br>
+        <input type="text" id="tax_rate" name="tax_rate" placeholder="例如: 13% 或 0.13" required><br>
         <label for="legal_unit">法定单位</label>
-        <input type="text" id="legal_unit" name="legal_unit" required><br>
+        <input type="text" id="legal_unit" name="legal_unit" placeholder="例如: 公斤, 件, 支" required><br>
         <label for="tax_price">完税价格</label>
-        <input type="text" id="tax_price" name="tax_price" required><br>
-        <input type="submit" value="Submit">
+        <input type="text" id="tax_price" name="tax_price" placeholder="如不适用可留空"><br>
+        <input type="submit" value="提交">
     </form>
-    <h1>Current Goods</h1>
+    
+    <p><a href="{{ url_for('upload_file') }}">返回上传页面</a></p>
+    
+    <h1>当前商品列表</h1>
     <table>
         <thead>
             <tr>
